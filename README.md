@@ -1,31 +1,31 @@
 # Storytelling Bibivaiafeira
 
-Aplicação web simples para exibir uma imagem de acordo com um status persistido no servidor.
+A simple web application that displays an image based on a status stored on the server.
 
-## Tecnologias
+## Technology stack
 
 - Python 3.11+
 - FastAPI
 - SQLAlchemy
-- PostgreSQL (Neon em produção)
-- Server-Sent Events (SSE) para atualização da tela em tempo real
-- Render para hospedagem
+- PostgreSQL (Neon in production)
+- Server-Sent Events (SSE) for real-time screen updates
+- Render for hosting
 
-## Como funciona
+## How it works
 
-A página `GET /bibivaiafeira` apresenta a imagem associada ao status atual. O navegador mantém uma conexão SSE aberta em `/api/events`. Quando o status muda, o servidor envia um evento e a página troca a imagem **sem recarregar**.
+The `GET /bibivaiafeira` page displays the image associated with the current status. The browser keeps an SSE connection open at `/api/events`. When the status changes, the server sends an event and the page switches images **without reloading**.
 
-Os status aceitos são:
+Supported statuses:
 
 - `start`
 - `products`
 - `purchase`
 
-As imagens ilustrativas estão em `app/static/images/`. Substitua os SVGs por suas imagens, mantendo os nomes `start.svg`, `products.svg` e `purchase.svg` (ou ajuste o mapeamento em `app/main.py`).
+The sample images are in `app/static/images/`. Replace the SVGs with your own images, keeping the filenames `start.svg`, `products.svg`, and `purchase.svg` (or update the mapping in `app/main.py`).
 
-## Executar localmente
+## Run locally
 
-Requer Python 3.11 ou superior.
+Requires Python 3.11 or later.
 
 ```bash
 python -m venv .venv
@@ -40,23 +40,27 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
 
-Acesse:
+Open:
 
-- Página: http://localhost:8000/bibivaiafeira
-- Documentação da API: http://localhost:8000/docs
+- Page: http://localhost:8000/bibivaiafeira
+- API documentation: http://localhost:8000/docs
 - Health check: http://localhost:8000/health
 
-Sem `DATABASE_URL`, a aplicação usa SQLite local (`storytelling.db`). Para produção, configure PostgreSQL.
+The application loads `.env.local` and then `.env` from the project root. Variables already set in the environment take precedence. Without `DATABASE_URL`, it uses a local SQLite database (`storytelling.db`).
+
+The project is linked to Neon through `.neon` (ignored by Git). To refresh local credentials, run `neon deploy`; it applies `neon.ts` and writes the variables to `.env.local`. Never commit this file to Git.
+
+Queries use `DATABASE_URL` (a pooled connection). When available, `DATABASE_URL_UNPOOLED` is used to create tables at startup. On Render, configure both variables with the Neon values; `.env.local` is not included in the deployment.
 
 ## API
 
-### Consultar o status atual
+### Get the current status
 
 ```http
 GET /api/status
 ```
 
-Exemplo de resposta:
+Example response:
 
 ```json
 {
@@ -65,75 +69,74 @@ Exemplo de resposta:
 }
 ```
 
-### Alterar o status
+### Update the status
 
-O endpoint solicitado é `POST /bibivaiafeira`, recebendo o status por query parameter:
+The `POST /bibivaiafeira` endpoint accepts the status as a query parameter:
 
 ```bash
 curl -X POST "http://localhost:8000/bibivaiafeira?status=products"
 ```
 
-Exemplo de resposta:
+Example response fields (the response also includes a `message` field containing a success message in Portuguese):
 
 ```json
 {
-  "message": "Status atualizado com sucesso.",
   "status": "products",
   "image": "/static/images/products.svg"
 }
 ```
 
-Valores permitidos: `start`, `products`, `purchase`. Um valor inválido resulta em HTTP 422 (validação automática do FastAPI).
+Allowed values: `start`, `products`, `purchase`. An invalid value returns HTTP 422 through FastAPI's automatic validation.
 
-### Atualização em tempo real
+### Real-time updates
 
-O navegador conecta-se a:
+The browser connects to:
 
 ```http
 GET /api/events
 ```
 
-Essa rota usa Server-Sent Events. O servidor verifica o status persistido a cada segundo e envia um evento quando detecta uma mudança. A página não precisa de refresh. O EventSource do navegador tenta reconectar automaticamente em caso de queda da conexão.
+This route uses Server-Sent Events. The server checks the stored status every second and sends an event when it detects a change. The page does not need to refresh. The browser's EventSource automatically attempts to reconnect if the connection drops.
 
-## Deploy no Render + Neon
+## Deploy on Render + Neon
 
-### 1. Criar o banco no Neon
+### 1. Create the database on Neon
 
-1. Crie uma conta em https://neon.com/.
-2. Crie um projeto PostgreSQL.
-3. Copie a connection string (formato PostgreSQL).
-4. Guarde-a para configurar a variável `DATABASE_URL` no Render.
+1. Create an account at https://neon.com/.
+2. Create a PostgreSQL project.
+3. Copy the connection strings in PostgreSQL format.
+4. Save them to configure `DATABASE_URL` and `DATABASE_URL_UNPOOLED` on Render.
 
-### 2. Publicar o código no GitHub
+### 2. Publish the code on GitHub
 
-Crie um repositório GitHub e envie todo o conteúdo deste projeto para a raiz dele.
+Create a GitHub repository and push the project files to its root, excluding credentials and other files ignored by Git.
 
-### 3. Criar o serviço no Render
+### 3. Create the service on Render
 
-1. Acesse https://render.com/ e conecte sua conta GitHub.
-2. Escolha **New > Blueprint** (ou crie um **Web Service** apontando para o repositório).
-3. O arquivo `render.yaml` configura build, comando de inicialização e health check.
-4. Configure `DATABASE_URL` com a connection string do Neon.
-   - Se o Neon fornecer uma URL `postgresql://...`, a aplicação converte automaticamente para o driver `psycopg`.
-5. Faça o deploy.
+1. Go to https://render.com/ and connect your GitHub account.
+2. Choose **New > Blueprint** (or create a **Web Service** pointing to the repository).
+3. The `render.yaml` file configures the build, startup command, and health check.
+4. Set `DATABASE_URL` to the pooled Neon connection string and `DATABASE_URL_UNPOOLED` to the direct connection string.
+   - If Neon provides a `postgresql://...` URL, the application automatically converts it to use the `psycopg` driver.
+5. Deploy the service.
 
-Após o deploy, a página estará em:
+After deployment, the page will be available at:
 
 ```text
-https://SEU-SERVICO.onrender.com/bibivaiafeira
+https://YOUR-SERVICE.onrender.com/bibivaiafeira
 ```
 
-O nome do serviço/subdomínio depende da disponibilidade no Render. Para ter um domínio contendo `storytelling`, escolha um nome de serviço como `storytelling-bibivaiafeira`, se estiver disponível. Um domínio próprio `.com.br` precisa ser registrado separadamente.
+The service name and subdomain depend on availability on Render. To include `storytelling` in the domain, choose a service name such as `storytelling-bibivaiafeira`, if available. A custom `.com.br` domain must be registered separately.
 
-## Observações sobre o plano gratuito
+## Free plan notes
 
-- O serviço web gratuito do Render pode entrar em repouso após um período sem tráfego; a primeira visita depois disso pode demorar para responder.
-- O banco Neon possui limites próprios no plano gratuito. Consulte os limites atuais no site do provedor.
-- O banco PostgreSQL externo é importante porque o disco local de um serviço gratuito pode ser efêmero. Não use o SQLite local como persistência de produção.
-- Este MVP não implementa autenticação, conforme solicitado. Qualquer pessoa que conheça a URL do POST poderá alterar o status. Não publique dados sensíveis nesse serviço.
-- Para manter o SSE simples, o serviço consulta o banco a cada segundo por conexão aberta. Para este MVP e uma instância pequena, é uma solução direta; se o número de espectadores crescer bastante, vale migrar para notificações/pub-sub.
+- Render's free web service may spin down after a period without traffic; the first visit afterward may take longer to respond.
+- Neon's database has its own free plan limits. Check the provider's website for current limits.
+- An external PostgreSQL database is important because a free service's local disk may be ephemeral. Do not use local SQLite for production persistence.
+- This MVP does not implement authentication, as requested. Anyone who knows the POST URL can change the status. Do not publish sensitive data through this service.
+- To keep SSE simple, the service queries the database every second for each open connection. This is a straightforward approach for this MVP and a small instance; if the audience grows significantly, consider switching to notifications or pub/sub.
 
-## Estrutura
+## Project structure
 
 ```text
 .

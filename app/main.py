@@ -13,7 +13,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from .database import Base, SessionLocal, engine
+from .database import Base, SessionLocal, schema_engine
 from .models import CurrentStatus
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -44,7 +44,7 @@ def read_current_status(db: Session) -> str:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    Base.metadata.create_all(bind=engine)
+    Base.metadata.create_all(bind=schema_engine)
     with SessionLocal() as db:
         read_current_status(db)
     yield
