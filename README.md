@@ -20,8 +20,11 @@ Supported statuses:
 - `start`
 - `products`
 - `purchase`
+- `continue`
+- `pastelaria`
+- `bibivaiafeira`
 
-The sample images are in `app/static/images/`. Replace the JPGs with your own images, keeping the filenames `start.jpg`, `products.jpg`, and `purchase.jpg` (or update the mapping in `app/main.py`).
+The images are in `app/static/images/`. Each status uses a JPG with the same name: `start.jpg`, `products.jpg`, `purchase.jpg`, `continue.jpg`, `pastelaria.jpg`, or `bibivaiafeira.jpg`. Keep these filenames when replacing images, or update the mapping in `app/main.py`.
 
 ## Run locally
 
@@ -86,7 +89,7 @@ Example response fields (the response also includes a `message` field containing
 }
 ```
 
-Allowed values: `start`, `products`, `purchase`. An invalid value returns HTTP 422 through FastAPI's automatic validation.
+Allowed values: `start`, `products`, `purchase`, `continue`, `pastelaria`, `bibivaiafeira`. An invalid value returns HTTP 422 through FastAPI's automatic validation.
 
 ### Real-time updates
 
@@ -152,7 +155,10 @@ The service name and subdomain depend on availability on Render. To include `sto
 │       └── images/
 │           ├── start.jpg
 │           ├── products.jpg
-│           └── purchase.jpg
+│           ├── purchase.jpg
+│           ├── continue.jpg
+│           ├── pastelaria.jpg
+│           └── bibivaiafeira.jpg
 ├── requirements.txt
 ├── Procfile
 ├── render.yaml

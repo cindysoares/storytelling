@@ -23,12 +23,18 @@ class StoryStatus(str, Enum):
     start = "start"
     products = "products"
     purchase = "purchase"
+    continue_ = "continue"
+    pastelaria = "pastelaria"
+    bibivaiafeira = "bibivaiafeira"
 
 
 STATUS_IMAGES = {
     StoryStatus.start.value: "/static/images/start.jpg",
     StoryStatus.products.value: "/static/images/products.jpg",
     StoryStatus.purchase.value: "/static/images/purchase.jpg",
+    StoryStatus.continue_.value: "/static/images/continue.jpg",
+    StoryStatus.pastelaria.value: "/static/images/pastelaria.jpg",
+    StoryStatus.bibivaiafeira.value: "/static/images/bibivaiafeira.jpg",
 }
 
 
@@ -73,7 +79,7 @@ def home(request: Request):
 
 
 @app.post("/bibivaiafeira")
-def update_status(status: StoryStatus = Query(..., description="Novo status: start, products ou purchase")):
+def update_status(status: StoryStatus = Query(..., description="Novo status da história")):
     with SessionLocal() as db:
         record = db.get(CurrentStatus, 1)
         if record is None:
