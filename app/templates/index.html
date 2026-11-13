@@ -4,21 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#17152b">
-  <title>Storytelling | Bibivaiafeira</title>
+  <title>Storytelling</title>
   <link rel="stylesheet" href="/static/css/styles.css">
 </head>
 <body>
   <main class="story" aria-live="polite">
-    <div class="eyebrow">STORYTELLING</div>
-    <h1>Bibivaiafeira</h1>
-    <p class="subtitle">Acompanhe nossa história.</p>
-    <div class="image-frame">
-      <img id="story-image" src="{{ image_url }}" alt="Imagem do status {{ status }}">
-    </div>
-    <div class="status-line">
-      <span class="status-dot" aria-hidden="true"></span>
-      <span>Status atual: <strong id="story-status">{{ status }}</strong></span>
-    </div>
+    <img id="story-image" src="{{ image_url }}" data-status="{{ status }}" alt="Cena da história">
   </main>
   <script src="/static/js/app.js" defer></script>
 </body>

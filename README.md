@@ -21,7 +21,7 @@ Supported statuses:
 - `products`
 - `purchase`
 
-The sample images are in `app/static/images/`. Replace the SVGs with your own images, keeping the filenames `start.svg`, `products.svg`, and `purchase.svg` (or update the mapping in `app/main.py`).
+The sample images are in `app/static/images/`. Replace the JPGs with your own images, keeping the filenames `start.jpg`, `products.jpg`, and `purchase.jpg` (or update the mapping in `app/main.py`).
 
 ## Run locally
 
@@ -65,7 +65,7 @@ Example response:
 ```json
 {
   "status": "start",
-  "image": "/static/images/start.svg"
+  "image": "/static/images/start.jpg"
 }
 ```
 
@@ -82,7 +82,7 @@ Example response fields (the response also includes a `message` field containing
 ```json
 {
   "status": "products",
-  "image": "/static/images/products.svg"
+  "image": "/static/images/products.jpg"
 }
 ```
 
@@ -150,9 +150,9 @@ The service name and subdomain depend on availability on Render. To include `sto
 │       ├── css/styles.css
 │       ├── js/app.js
 │       └── images/
-│           ├── start.svg
-│           ├── products.svg
-│           └── purchase.svg
+│           ├── start.jpg
+│           ├── products.jpg
+│           └── purchase.jpg
 ├── requirements.txt
 ├── Procfile
 ├── render.yaml

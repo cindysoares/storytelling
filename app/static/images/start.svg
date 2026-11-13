@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675">
-  <defs><linearGradient id="g" x2="1" y2="1"><stop stop-color="#f7b267"/><stop offset="1" stop-color="#9b5de5"/></linearGradient></defs>
-  <rect width="1200" height="675" fill="url(#g)"/>
-  <circle cx="930" cy="170" r="95" fill="#fff" opacity=".25"/>
-  <path d="M0 520 Q260 360 500 520 T1200 480 V675 H0Z" fill="#33245c" opacity=".55"/>
-  <text x="600" y="330" text-anchor="middle" font-family="Arial,sans-serif" font-size="86" font-weight="bold" fill="#fff">START</text>
-  <text x="600" y="395" text-anchor="middle" font-family="Arial,sans-serif" font-size="28" fill="#fff">A história começa aqui</text>
-</svg>

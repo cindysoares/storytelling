@@ -26,9 +26,9 @@ class StoryStatus(str, Enum):
 
 
 STATUS_IMAGES = {
-    StoryStatus.start.value: "/static/images/start.svg",
-    StoryStatus.products.value: "/static/images/products.svg",
-    StoryStatus.purchase.value: "/static/images/purchase.svg",
+    StoryStatus.start.value: "/static/images/start.jpg",
+    StoryStatus.products.value: "/static/images/products.jpg",
+    StoryStatus.purchase.value: "/static/images/purchase.jpg",
 }
 
 

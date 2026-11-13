@@ -1,15 +1,13 @@
 (() => {
   const image = document.getElementById("story-image");
-  const statusLabel = document.getElementById("story-status");
 
   function renderStatus(data) {
     if (!data || !data.status || !data.image) return;
 
     // Evita piscar a tela se o servidor reenviar o mesmo estado.
-    if (statusLabel.textContent !== data.status) {
+    if (image.dataset.status !== data.status) {
       image.src = data.image;
-      image.alt = `Imagem do status ${data.status}`;
-      statusLabel.textContent = data.status;
+      image.dataset.status = data.status;
     }
   }
 
